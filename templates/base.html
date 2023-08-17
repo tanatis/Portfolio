@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'create_portfolio' %}">Create portfolio</a></li>
+            <li><a href="{% url 'details_portfolio' pk=1 %}">Portfolio</a></li>
+            <li><a href="{% url 'add_position' %}">Add position</a></li>
+        </ul>
+    </nav>
+</header>
+
+{% block page_content %}
+{% endblock %}
+
+</body>
+</html>

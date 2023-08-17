@@ -26,7 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'portfolio.stock_picker'
+    'portfolio.stocks_portfolio',
+    'portfolio.tickers_list',
+    'portfolio.position',
 ]
 
 MIDDLEWARE = [

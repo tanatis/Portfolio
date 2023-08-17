@@ -1,13 +1,27 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<h1>Hello World!</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block page_content %}
+<div>
+    <form action="{% url 'index' %}" method="get">
+        {{ form }}
+        <button>Search</button>
+        {% csrf_token %}
+    </form>
+</div>
+<ol>
+    {% for ticker in search_result %}
+        <li><a href="{% url 'info' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }} ({{ ticker.index }}) / {{ ticker.price }}</li>
+    {% endfor %}
+</ol>
+
+<hr>
+
+{#<ol>#}
+{#    {% for ticker in all_tickers %}#}
+{#        <li>{{ ticker.symbol }} - {{ ticker.company_name }} ({{ ticker.index }})</li>#}
+{#    {% endfor %}#}
+{#</ol>#}
+
+{{ all_tickers }}
+<hr>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <h2>portfolio details</h2>
+    {{ portfolio.name }}: {{ portfolio.cash }}
+
+    <hr>
+
+    {% for position in positions %}
+        <p>{{ position.ticker }} | {{ position.count }} | {{ position.price }} | Total:{{ position.position_total }}</p>
+    {% endfor %}
+{% endblock %}
