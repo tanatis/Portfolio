@@ -1,1 +1,4 @@
 header nav ul {display: flex; list-style: none; gap: 3rem;}
+.portfolio {display: flex; flex-direction: column;}
+.portfolio ul {display: flex; list-style: none; border: 1px solid black;}
+.portfolio ul li {width: 150px; text-align: center;}

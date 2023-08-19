@@ -13,3 +13,6 @@ class Position(models.Model):
 
     def position_total(self):
         return self.price * self.count
+
+    def avg_price(self):
+        return self.price / self.count

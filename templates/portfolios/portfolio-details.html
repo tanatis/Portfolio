@@ -4,8 +4,21 @@
     {{ portfolio.name }}: {{ portfolio.cash }}
 
     <hr>
+    <div class="portfolio">
+        <ul>
+            <li>Ticker</li>
+            <li>shares count</li>
+            <li>price per share</li>
+            <li>total invested</li>
+        </ul>
+        {% for position in positions %}
+            <ul>
+                <li>{{ position.ticker }}</li>
+                <li>{{ position.count }}</li>
+                <li>{{ position.avg_price|floatformat:2 }}</li>
+                <li>Total:{{ position.price }}</li>
+            </ul>
+        {% endfor %}
+    </div>
 
-    {% for position in positions %}
-        <p>{{ position.ticker }} | {{ position.count }} | {{ position.price }} | Total:{{ position.position_total }}</p>
-    {% endfor %}
 {% endblock %}

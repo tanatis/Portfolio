@@ -9,5 +9,5 @@ class Portfolio(models.Model):
     #position = models.ForeignKey(Position, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
-
-
+    def __str__(self):
+        return self.name

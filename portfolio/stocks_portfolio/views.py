@@ -25,11 +25,12 @@ def create_portfolio(request):
 
 
 def details_portfolio(request, pk):
-    portfolio = Portfolio.objects.filter(pk=pk).get()
+    portfolio = Portfolio.objects.filter(pk=pk, user_id=request.user.id).get()
     positions = Position.objects.filter(to_portfolio_id=portfolio.pk)
-    print(positions)
+    #print(positions)
     context = {
         'portfolio': portfolio,
         'positions': positions,
     }
     return render(request, 'portfolios/portfolio-details.html', context)
+

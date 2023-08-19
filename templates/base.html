@@ -13,18 +13,18 @@
             <li><a href="{% url 'index' %}">Home</a></li>
             {% if request.user.is_authenticated %}
                 Hello, <a href="{% url 'profile details' pk=request.user.pk %}">{{ request.user.username }}</a>:
-                <li><a href="{% url 'create_portfolio' %}">Create portfolio</a></li>
 
-                {% if request.user.portfolio_set.all %}
-                    <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                        <option value="">Select Portfolio</option>
+                <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                    <option value="">Select Portfolio</option>
+                    {% if request.user.portfolio_set.all %}
                         {% for portfolio in request.user.portfolio_set.all %}
-                            {#                    <li><a href="{% url 'details_portfolio' pk=portfolio.id %}">{{ portfolio.name }}</a></li>#}
                             <option value="{% url 'details_portfolio' pk=portfolio.id %}">{{ portfolio.name }}</option>
-
                         {% endfor %}
-                    </select>
-                {% endif %}
+                    {% endif %}
+                    <option></option>
+                    <option value="{% url 'create_portfolio' %}">Create new portfolio</option>
+                </select>
+
                 <a href="{% url 'logout' %}">Logout</a>
             {% else %}
                 <a href="{% url 'signup' %}">Register</a>
