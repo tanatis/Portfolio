@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from portfolio.position.models import Position
@@ -5,18 +6,22 @@ from portfolio.stocks_portfolio.forms import AddPortfolioForm
 from portfolio.stocks_portfolio.models import Portfolio
 
 
+@login_required
 def create_portfolio(request):
+    user = request.user
     if request.method == 'GET':
         form = AddPortfolioForm()
     else:
         form = AddPortfolioForm(request.POST)
         if form.is_valid():
-            form.save()
+            portfolio = form.save(commit=False)
+            portfolio.user = user
+            portfolio.save()
             return redirect('index')
     context = {
         'form': form,
     }
-    return render(request, 'create-portfolio.html', context)
+    return render(request, 'portfolios/create-portfolio.html', context)
 
 
 def details_portfolio(request, pk):
@@ -27,4 +32,4 @@ def details_portfolio(request, pk):
         'portfolio': portfolio,
         'positions': positions,
     }
-    return render(request, 'portfolio-details.html', context)
+    return render(request, 'portfolios/portfolio-details.html', context)

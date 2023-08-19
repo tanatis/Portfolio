@@ -9,7 +9,7 @@
 </div>
 <ol>
     {% for ticker in search_result %}
-        <li><a href="{% url 'info' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }} ({{ ticker.index }}) / {{ ticker.price }}</li>
+        <li><a href="{% url 'ticker_details' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }}</li>
     {% endfor %}
 </ol>
 
@@ -21,7 +21,7 @@
 {#    {% endfor %}#}
 {#</ol>#}
 
-{{ all_tickers }}
+{{ tickers_count }}
 <hr>
 
 {% endblock %}

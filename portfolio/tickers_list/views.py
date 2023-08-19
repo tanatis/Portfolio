@@ -25,16 +25,16 @@ def index(request):
     # for ticker in search_result:
     #     ticker.price = get_live_price(ticker.symbol)
 
-    print(search_result)
+    #print(search_result)
     context = {
-        'all_tickers': all_tickers.count(),
+        'tickers_count': all_tickers.count(),
         'search_result': search_result,
         'form': form,
     }
     return render(request, 'index.html', context)
 
 
-def ticker_info(request, symbol):
+def ticker_details(request, symbol):
     ticker = Ticker.objects.filter(symbol__exact=symbol).get()
     price = get_live_price(ticker.symbol)
 
@@ -42,4 +42,4 @@ def ticker_info(request, symbol):
         'ticker': ticker,
         'price': price,
     }
-    return render(request, 'ticker-info.html', context)
+    return render(request, 'ticker-details.html', context)

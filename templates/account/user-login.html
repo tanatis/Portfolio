@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <form action="{% url 'login' %}" method="post">
+            <div class="lib-form-line">
+                {{ form.username.error }}
+                {{ form.username }}
+            </div>
+            <div class="lib-form-line">
+                {{ form.password.error }}
+                {{ form.password }}
+            </div>
+            <button class="lib-form-btn">Login</button>
+            {% csrf_token %}
+        </form>
+
+{% endblock %}

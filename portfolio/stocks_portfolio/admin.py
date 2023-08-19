@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from portfolio.stocks_portfolio.models import Portfolio
+
+
+@admin.register(Portfolio)
+class PortfolioAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user',)

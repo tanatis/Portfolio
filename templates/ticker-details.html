@@ -2,5 +2,6 @@
 {% block page_content %}
 
     <h1>{{ ticker.company_name }}: ${{ price|floatformat:2 }}</h1>
+    <a href="{% url 'add_position' pk=ticker.pk %}">Add position</a>
 
 {% endblock %}

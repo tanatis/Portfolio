@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <form action="{% url 'signup' %}" method="post">
+            <div class="lib-form-line">
+                {{ form.username.errors }}
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.help_text }}
+            </div>
+            <div class="lib-form-line">
+                {{ form.email.errors }}
+                {{ form.email }}
+                {{ form.email.help_text }}
+            </div>
+            <div class="lib-form-line">
+                {{ form.password1.errors }}
+                {{ form.password2.errors }}
+                {{ form.password1 }}
+            </div>
+            <div class="lib-form-line">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+            </div>
+            <div class="lib-form-line">
+                {{ form.consent }}
+                {{ form.consent.help_text }}
+            </div>
+            {% csrf_token %}
+            <button class="lib-form-btn">Register</button>
+        </form>
+
+{% endblock %}

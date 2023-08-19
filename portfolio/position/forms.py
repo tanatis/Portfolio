@@ -6,4 +6,4 @@ from portfolio.position.models import Position
 class AddPositionForm(forms.ModelForm):
     class Meta:
         model = Position
-        fields = '__all__'
+        fields = ('count', 'price', 'to_portfolio')
