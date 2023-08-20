@@ -1,8 +1,10 @@
 from django.db.models import Q
 from django.shortcuts import render
 from yahoo_fin.stock_info import get_live_price
-from portfolio.tickers_list.forms import SearchTickerForm
-from portfolio.tickers_list.models import Ticker
+
+from portfolio.common.forms import SearchTickerForm
+from portfolio.common.models import Ticker
+
 
 # TODO: https://stockanalysis.com/list/nasdaq-stocks/
 
@@ -43,3 +45,7 @@ def ticker_details(request, symbol):
         'price': price,
     }
     return render(request, 'ticker-details.html', context)
+
+
+def error_page(request):
+    return render(request, 'common/error.html')

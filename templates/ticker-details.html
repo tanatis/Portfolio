@@ -11,7 +11,7 @@
                 <option value="{{ portfolio.pk }}">{{ portfolio.name }}</option>
             {% endfor %}
         </select>
-        <a href="{% url 'add_position' pk=ticker.pk %}">Add position</a>
+        <a href="{% url 'create_position' pk=ticker.pk %}">Add position</a>
     {% else %}
         <a href="{% url 'login' %}">Login</a> or <a href="{% url 'signup' %}">Register</a> to add {{ ticker.symbol }} to
         your portfolio

@@ -1,24 +1,30 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h2>portfolio details</h2>
-    {{ portfolio.name }}: {{ portfolio.cash }}
 
-    <hr>
+    <h2>Portfolio: {{ portfolio.name }}</h2><span><a href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
+
     <div class="portfolio">
-        <ul>
-            <li>Ticker</li>
-            <li>shares count</li>
-            <li>price per share</li>
-            <li>total invested</li>
-        </ul>
+        <div class="portfolio-header">
+            <div class="portfolio-cell">Ticker</div>
+            <div class="portfolio-cell">shares count</div>
+            <div class="portfolio-cell">price per share</div>
+            <div class="portfolio-cell">total invested</div>
+        </div>
         {% for position in positions %}
-            <ul>
-                <li>{{ position.ticker }}</li>
-                <li>{{ position.count }}</li>
-                <li>{{ position.avg_price|floatformat:2 }}</li>
-                <li>Total:{{ position.price }}</li>
-            </ul>
+            <div class="portfolio-row">
+                <div class="portfolio-cell">{{ position.ticker }}</div>
+                <div class="portfolio-cell">{{ position.count }}</div>
+                <div class="portfolio-cell">{{ position.avg_price|floatformat:2 }}</div>
+                <div class="portfolio-cell">{{ position.price }}</div>
+                <div class="portfolio-cell"><a href="{% url 'add_to_position' pk=position.pk %}">Buy more / Sell</a></div>
+            </div>
         {% endfor %}
+        <div class="portfolio-row">
+            <div class="portfolio-cell">Cash:</div>
+            <div class="portfolio-cell"></div>
+            <div class="portfolio-cell"></div>
+            <div class="portfolio-cell">{{ portfolio.cash }}</div>
+        </div>
     </div>
 
 {% endblock %}

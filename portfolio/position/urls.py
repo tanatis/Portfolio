@@ -1,7 +1,8 @@
 from django.urls import path
 
-from portfolio.position.views import add_position
+from portfolio.position.views import create_position, add_to_position
 
 urlpatterns = [
-    path('add/<int:pk>/', add_position, name='add_position')
+    path('<int:pk>/create/', create_position, name='create_position'),
+    path('<int:pk>/add/', add_to_position, name='add_to_position'),
 ]

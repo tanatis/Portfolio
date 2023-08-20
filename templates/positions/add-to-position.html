@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <h3>Add more {{ position.ticker }} shares to {{ portfolio.name }}</h3>
+    <form action="{% url 'add_to_position' pk=position.pk %}" method="post">
+        {{ form }}
+        <button>Add</button>
+        {% csrf_token %}
+    </form>
+{% endblock %}

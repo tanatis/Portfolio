@@ -30,8 +30,8 @@ INSTALLED_APPS = [
 
     'portfolio.account',
     'portfolio.stocks_portfolio',
-    'portfolio.tickers_list',
     'portfolio.position',
+    'portfolio.common',
 ]
 
 MIDDLEWARE = [

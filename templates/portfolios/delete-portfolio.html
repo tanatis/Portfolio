@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<div>
+    <h3>Are you sure you want to delete portfolio {{ portfolio.name }}?</h3>
+    <form action="{% url 'delete_portfolio' pk=portfolio.pk %}" method="post">
+        {{ form }}
+        <button>Delete</button>
+        {% csrf_token %}
+    </form>
+</div>
+{% endblock %}

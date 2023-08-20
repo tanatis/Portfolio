@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from portfolio.position.models import Position
-from portfolio.stocks_portfolio.forms import AddPortfolioForm
+from portfolio.stocks_portfolio.forms import AddPortfolioForm, DeletePortfolioForm
 from portfolio.stocks_portfolio.models import Portfolio
 
 
@@ -34,3 +34,20 @@ def details_portfolio(request, pk):
     }
     return render(request, 'portfolios/portfolio-details.html', context)
 
+
+def delete_portfolio(request, pk):
+    portfolio = Portfolio.objects.get(pk=pk)
+
+    if request.method == "GET":
+        form = DeletePortfolioForm(instance=portfolio)
+    else:
+        form = DeletePortfolioForm(request.POST, instance=portfolio)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+
+    context = {
+        'form': form,
+        'portfolio': portfolio,
+    }
+    return render(request, 'portfolios/delete-portfolio.html', context)

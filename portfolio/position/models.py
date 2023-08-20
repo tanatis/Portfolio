@@ -1,7 +1,7 @@
 from django.db import models
 
+from portfolio.common.models import Ticker
 from portfolio.stocks_portfolio.models import Portfolio
-from portfolio.tickers_list.models import Ticker
 
 
 class Position(models.Model):
@@ -16,3 +16,7 @@ class Position(models.Model):
 
     def avg_price(self):
         return self.price / self.count
+
+
+class PositionHistory(models.Model):
+    pass

@@ -7,3 +7,14 @@ class AddPortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
         fields = ('name', 'cash')
+
+
+class DeletePortfolioForm(forms.ModelForm):
+    class Meta:
+        model = Portfolio
+        fields = ()
+
+    def save(self, commit=True):
+        if commit:
+            self.instance.delete()
+        return self.instance
