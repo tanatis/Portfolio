@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <h2>Portfolio: {{ portfolio.name }}</h2><span><a href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
+    <h2>Portfolio: {{ portfolio.name }}</h2>
+    <span><a href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
 
     <div class="portfolio">
         <div class="portfolio-header">
@@ -16,8 +17,19 @@
                 <div class="portfolio-cell">{{ position.count }}</div>
                 <div class="portfolio-cell">{{ position.avg_price|floatformat:2 }}</div>
                 <div class="portfolio-cell">{{ position.price }}</div>
-                <div class="portfolio-cell"><a href="{% url 'add_to_position' pk=position.pk %}">Buy more / Sell</a></div>
+                <div class="portfolio-cell"><a href="{% url 'add_to_position' pk=position.pk %}">Buy more / Sell</a>
+                </div>
             </div>
+            {% if position.positionhistory_set.all|length > 1 %}
+                {% for history in position.positionhistory_set.all %}
+                    <div class="portfolio-row">
+                        <div class="portfolio-cell">{{ history.date_added }}</div>
+                        <div class="portfolio-cell">{{ history.count }}</div>
+                        <div class="portfolio-cell">{{ history.price }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
         {% endfor %}
         <div class="portfolio-row">
             <div class="portfolio-cell">Cash:</div>

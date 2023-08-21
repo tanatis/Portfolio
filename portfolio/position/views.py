@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from portfolio.common.models import Ticker
 from portfolio.position.forms import CreatePositionForm, AddToPositionForm
-from portfolio.position.models import Position
+from portfolio.position.models import Position, PositionHistory
 from portfolio.stocks_portfolio.models import Portfolio
 
 
@@ -29,6 +29,8 @@ def create_position(request, pk):
                 existing_position.count += count
                 existing_position.price += price * count
                 existing_position.save()
+                position_history = PositionHistory(to_position=existing_position, date_added=existing_position.date_added, count=count, price=price)
+                position_history.save()
             else:
                 # Create a new position
                 position = Position(
@@ -38,6 +40,8 @@ def create_position(request, pk):
                     to_portfolio_id=portfolio_id
                 )
                 position.save()
+                position_history = PositionHistory(to_position=position, date_added=position.date_added, count=position.count, price=price)
+                position_history.save()
             portfolio.cash -= count * price
             portfolio.save()
             return redirect('details_portfolio', pk=portfolio.pk)
@@ -73,6 +77,8 @@ def add_to_position(request, pk):
 
             portfolio.cash -= count * price
             portfolio.save()
+            position_history = PositionHistory(to_position=position, date_added=position.date_added, count=count, price=price)
+            position_history.save()
             return redirect('details_portfolio', pk=portfolio.pk)
 
     context = {

@@ -27,7 +27,6 @@ def create_portfolio(request):
 def details_portfolio(request, pk):
     portfolio = Portfolio.objects.filter(pk=pk, user_id=request.user.id).get()
     positions = Position.objects.filter(to_portfolio_id=portfolio.pk)
-    #print(positions)
     context = {
         'portfolio': portfolio,
         'positions': positions,
