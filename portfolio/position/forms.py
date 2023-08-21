@@ -13,3 +13,9 @@ class AddToPositionForm(forms.ModelForm):
     class Meta:
         model = Position
         fields = ('count', 'price',)
+
+
+class SellPositionForm(forms.ModelForm):
+    class Meta:
+        model = Position
+        fields = ('count', 'price',)

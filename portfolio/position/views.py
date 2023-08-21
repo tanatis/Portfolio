@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 from portfolio.common.models import Ticker
-from portfolio.position.forms import CreatePositionForm, AddToPositionForm
+from portfolio.position.forms import CreatePositionForm, AddToPositionForm, SellPositionForm
 from portfolio.position.models import Position, PositionHistory
 from portfolio.stocks_portfolio.models import Portfolio
 
@@ -28,6 +29,7 @@ def create_position(request, pk):
                 # Update the existing position's count and price
                 existing_position.count += count
                 existing_position.price += price * count
+                existing_position.avg_price = existing_position.price / existing_position.count
                 existing_position.save()
                 position_history = PositionHistory(to_position=existing_position, date_added=existing_position.date_added, count=count, price=price)
                 position_history.save()
@@ -37,7 +39,8 @@ def create_position(request, pk):
                     ticker=ticker,
                     count=count,
                     price=price * count,
-                    to_portfolio_id=portfolio_id
+                    to_portfolio_id=portfolio_id,
+                    avg_price=price,
                 )
                 position.save()
                 position_history = PositionHistory(to_position=position, date_added=position.date_added, count=position.count, price=price)
@@ -73,6 +76,7 @@ def add_to_position(request, pk):
 
             position.count += count
             position.price += count * price
+            position.avg_price = position.price / position.count
             position.save()
 
             portfolio.cash -= count * price
@@ -88,3 +92,39 @@ def add_to_position(request, pk):
     }
 
     return render(request, 'positions/add-to-position.html', context)
+
+
+def sell_position(request, pk):
+    position = Position.objects.get(pk=pk)
+    portfolio = Portfolio.objects.get(pk=position.to_portfolio.id)
+    if request.method == 'GET':
+        form = SellPositionForm()
+    else:
+        form = SellPositionForm(request.POST)
+        if form.is_valid():
+            count = form.cleaned_data['count']
+            price = form.cleaned_data['price']
+            if count > position.count:
+                messages.error(request, f'You cannot sell more than {position.count} shares')
+                return redirect(request.META['HTTP_REFERER'])
+            elif count == position.count:
+                position.delete()
+            else:
+                position.count -= count
+                position.price -= count * position.avg_price
+                position.save()
+                position_history = PositionHistory(to_position=position, date_added=position.date_added, count=-count, price=price)
+                position_history.save()
+
+            # position.price -= price * count
+            portfolio.cash += count * price
+            portfolio.save()
+            #position.save()
+            return redirect('details_portfolio', pk=portfolio.pk)
+
+    context = {
+        'form': form,
+        'position': position,
+    }
+
+    return render(request, 'positions/sell-position.html', context)
