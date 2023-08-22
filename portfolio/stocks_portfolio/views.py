@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from yahoo_fin.stock_info import get_live_price
 
 from portfolio.position.models import Position
 from portfolio.stocks_portfolio.forms import AddPortfolioForm, DeletePortfolioForm, CashTransactionForm
@@ -28,6 +29,9 @@ def create_portfolio(request):
 def details_portfolio(request, pk):
     portfolio = Portfolio.objects.filter(pk=pk, user_id=request.user.id).get()
     positions = Position.objects.filter(to_portfolio_id=portfolio.pk)
+    for position in positions:
+        position.current_price = get_live_price(position.ticker.symbol)
+        position.change = (position.current_price - position.avg_price) / position.avg_price * 100
 
     context = {
         'portfolio': portfolio,

@@ -20,7 +20,8 @@ def create_position(request, pk):
             portfolio_id = form.cleaned_data['to_portfolio'].id
             portfolio = Portfolio.objects.get(pk=portfolio_id)
             if count * price > portfolio.cash:
-                return redirect('error')
+                messages.error(request, f'Insufficient funds')
+                return redirect(request.META['HTTP_REFERER'])
 
             # Check if a position with the same ticker already exists in the portfolio
             existing_position = Position.objects.filter(ticker=ticker, to_portfolio_id=portfolio_id).first()
@@ -72,7 +73,8 @@ def add_to_position(request, pk):
             count = form.cleaned_data['count']
             price = form.cleaned_data['price']
             if count * price > portfolio.cash:
-                return redirect('error')
+                messages.error(request, 'Not enough cash to complete the operation')
+                return redirect(request.META['HTTP_REFERER'])
 
             position.count += count
             position.price += count * price

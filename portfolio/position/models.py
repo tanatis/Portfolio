@@ -24,15 +24,6 @@ class Position(models.Model):
 
 class PositionHistory(models.Model):
     to_position = models.ForeignKey(Position, on_delete=models.CASCADE)
-    # operation = models.CharField(
-    #     choices=(
-    #         ('buy', 'Buy'),
-    #         ('sell', 'Sell'),
-    #     ),
-    #     blank=True,
-    #     null=True,
-    #     max_length=4,
-    # )
     date_added = models.DateField(blank=True, null=True)
     count = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
