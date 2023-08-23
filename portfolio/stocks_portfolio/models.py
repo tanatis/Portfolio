@@ -6,6 +6,7 @@ UserModel = get_user_model()
 class Portfolio(models.Model):
     name = models.CharField(max_length=50)
     cash = models.FloatField()
+    date_added = models.DateField(auto_now_add=True)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
 
     def __str__(self):

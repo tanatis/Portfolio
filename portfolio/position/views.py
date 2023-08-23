@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
+from portfolio.account.models import AppUserHistory
 from portfolio.common.models import Ticker
 from portfolio.position.forms import CreatePositionForm, AddToPositionForm, SellPositionForm
 from portfolio.position.models import Position, PositionHistory
@@ -13,7 +14,7 @@ def create_position(request, pk):
     ticker = get_object_or_404(Ticker, pk=pk)
 
     if request.method == 'POST':
-        form = CreatePositionForm(request.POST)
+        form = CreatePositionForm(request.POST, user=request.user)
         if form.is_valid():
             count = form.cleaned_data['count']
             price = form.cleaned_data['price']
@@ -32,8 +33,19 @@ def create_position(request, pk):
                 existing_position.price += price * count
                 existing_position.avg_price = existing_position.price / existing_position.count
                 existing_position.save()
+
                 position_history = PositionHistory(to_position=existing_position, date_added=existing_position.date_added, count=count, price=price)
                 position_history.save()
+
+                user_history = AppUserHistory(
+                    to_user=request.user,
+                    operation_type='buy',
+                    ticker=existing_position.ticker.symbol,
+                    date_added=existing_position.date_added,
+                    count=count,
+                    price=price)
+                user_history.save()
+
             else:
                 # Create a new position
                 position = Position(
@@ -44,14 +56,29 @@ def create_position(request, pk):
                     avg_price=price,
                 )
                 position.save()
-                position_history = PositionHistory(to_position=position, date_added=position.date_added, count=position.count, price=price)
+
+                position_history = PositionHistory(
+                    to_position=position,
+                    date_added=position.date_added,
+                    count=position.count,
+                    price=price)
                 position_history.save()
+
+                user_history = AppUserHistory(
+                    to_user=request.user,
+                    operation_type='buy',
+                    ticker=position.ticker.symbol,
+                    date_added=position.date_added,
+                    count=position.count,
+                    price=price)
+                user_history.save()
+
             portfolio.cash -= count * price
             portfolio.save()
             return redirect('details_portfolio', pk=portfolio.pk)
 
     else:
-        form = CreatePositionForm(initial={'ticker': ticker})
+        form = CreatePositionForm(user=request.user)
 
     context = {
         'form': form,
@@ -83,8 +110,23 @@ def add_to_position(request, pk):
 
             portfolio.cash -= count * price
             portfolio.save()
-            position_history = PositionHistory(to_position=position, date_added=position.date_added, count=count, price=price)
+
+            position_history = PositionHistory(
+                to_position=position,
+                date_added=position.date_added,
+                count=count,
+                price=price)
             position_history.save()
+
+            user_history = AppUserHistory(
+                to_user=request.user,
+                operation_type='buy',
+                ticker=position.ticker.symbol,
+                date_added=position.date_added,
+                count=count,
+                price=price)
+            user_history.save()
+
             return redirect('details_portfolio', pk=portfolio.pk)
 
     context = {
@@ -111,17 +153,41 @@ def sell_position(request, pk):
                 return redirect(request.META['HTTP_REFERER'])
             elif count == position.count:
                 position.delete()
+
+                user_history = AppUserHistory(
+                    to_user=request.user,
+                    operation_type='sell',
+                    ticker=position.ticker.symbol,
+                    date_added=position.date_added,
+                    count=-count,
+                    price=price)
+                user_history.save()
+
             else:
                 position.count -= count
                 position.price -= count * position.avg_price
                 position.save()
-                position_history = PositionHistory(to_position=position, date_added=position.date_added, count=-count, price=price)
+
+                position_history = PositionHistory(
+                    to_position=position,
+                    date_added=position.date_added,
+                    count=-count,
+                    price=price)
                 position_history.save()
 
-            # position.price -= price * count
+                user_history = AppUserHistory(
+                    to_user=request.user,
+                    operation_type='sell',
+                    ticker=position.ticker.symbol,
+                    date_added=position.date_added,
+                    count=-count,
+                    price=price)
+                user_history.save()
+
+                return redirect('details_portfolio', pk=portfolio.pk)
+
             portfolio.cash += count * price
             portfolio.save()
-            #position.save()
             return redirect('details_portfolio', pk=portfolio.pk)
 
     context = {

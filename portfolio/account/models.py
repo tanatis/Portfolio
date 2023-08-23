@@ -1,7 +1,9 @@
 from django.contrib.auth.models import UserManager
 from django.db import models
-from django.contrib.auth import models as auth_models
+from django.contrib.auth import models as auth_models, get_user_model
 from django.utils import timezone
+
+#UserModel = get_user_model()
 
 
 class AppUser(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
@@ -52,3 +54,21 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,  # pk на UserModel става pk на Profile (т.е. Profile вече няма pk в базата)
     )
+
+
+class AppUserHistory(models.Model):
+    to_user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    operation_type = models.CharField(
+        choices=[
+            ('buy', 'Buy'),
+            ('sell', 'Sell'),
+            ('deposit', 'Deposit'),
+            ('withdraw', 'Withdraw'),
+            ('dividend', 'Dividend'),
+        ],
+        max_length=8
+    )
+    ticker = models.CharField(blank=True, null=True, max_length=5)
+    date_added = models.DateField()
+    count = models.FloatField(blank=True, null=True)
+    price = models.FloatField()

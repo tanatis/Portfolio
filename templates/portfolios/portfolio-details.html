@@ -5,7 +5,7 @@
     <span><a href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
     <span><a href="{% url 'add_withdraw_cash' pk=portfolio.pk %}">Deposit / Withdraw</a></span>
 
-    <div class="portfolio">
+    <div class="portfolio accordion">
         <div class="portfolio-header">
             <div class="portfolio-cell">Ticker</div>
             <div class="portfolio-cell">shares count</div>
@@ -16,33 +16,31 @@
         </div>
 
         {% for position in positions %}
-            <div class="portfolio-position accordion">
-                <div class="portfolio-row {% if position.positionhistory_set.all|length > 1 %}accordion-toggle{% endif %}">
-                    <div class="portfolio-cell">{{ position.ticker }}</div>
-                    <div class="portfolio-cell">{{ position.count }}</div>
-                    <div class="portfolio-cell">{{ position.avg_price|floatformat:2 }}</div>
-                    <div class="portfolio-cell">{{ position.price }}</div>
-                    <div class="portfolio-cell">{{ position.current_price|floatformat:2 }}</div>
-                    <div class="portfolio-cell">{{ position.change|floatformat:2 }}%</div>
-                    <div class="portfolio-cell">
-                        <a href="{% url 'add_to_position' pk=position.pk %}">Add</a> /
-                        <a href="{% url 'sell_position' pk=position.pk %}">Sell</a>
-                    </div>
+            <div class="portfolio-row {% if position.positionhistory_set.all|length > 1 %}accordion-toggle{% endif %}">
+                <div class="portfolio-cell">{{ position.ticker }}</div>
+                <div class="portfolio-cell">{{ position.count }}</div>
+                <div class="portfolio-cell">{{ position.avg_price|floatformat:2 }}</div>
+                <div class="portfolio-cell">{{ position.price }}</div>
+                <div class="portfolio-cell">{{ position.current_price|floatformat:2 }}</div>
+                <div class="portfolio-cell">{{ position.change|floatformat:2 }}%</div>
+                <div class="portfolio-cell">
+                    <a href="{% url 'add_to_position' pk=position.pk %}">Add</a> /
+                    <a href="{% url 'sell_position' pk=position.pk %}">Sell</a>
                 </div>
-                {% if position.positionhistory_set.all|length > 1 %}
-                    <div class="accordion-content">
-                        {% for history in position.positionhistory_set.all %}
-                            <div class="portfolio-row">
-                                <div class="portfolio-cell">{{ history.date_added }}</div>
-                                <div class="portfolio-cell">{% if history.count < 0 %}Sell {{ history.count }}{% else %}
-                                    Buy
-                                    {{ history.count }}{% endif %}</div>
-                                <div class="portfolio-cell">{{ history.price }}</div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
+            {% if position.positionhistory_set.all|length > 1 %}
+                <div class="accordion-content">
+                    {% for history in position.positionhistory_set.all %}
+                        <div class="portfolio-row">
+                            <div class="portfolio-cell">{{ history.date_added }}</div>
+                            <div class="portfolio-cell">{% if history.count < 0 %}Sell {{ history.count }}{% else %}
+                                Buy
+                                {{ history.count }}{% endif %}</div>
+                            <div class="portfolio-cell">{{ history.price }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endfor %}
 
         <div class="portfolio-row">
@@ -52,5 +50,7 @@
             <div class="portfolio-cell">{{ portfolio.cash }}</div>
         </div>
     </div>
+
+
 
 {% endblock %}

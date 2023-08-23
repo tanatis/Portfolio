@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views import generic as views
 
 from portfolio.account.forms import AppUserCreationForm, ProfileEditForm, AppUserDeleteForm
-from portfolio.account.models import Profile
+from portfolio.account.models import Profile, AppUserHistory
 
 UserModel = get_user_model()
 
@@ -95,3 +95,13 @@ def user_delete(request, pk):
         'user': user,
     }
     return render(request, 'account/user-delete.html', context)
+
+
+def account_history(request, pk):
+    transaction_history = AppUserHistory.objects.filter(to_user_id=request.user.pk)
+
+    context = {
+        'transaction_history': transaction_history,
+    }
+
+    return render(request, 'account/transaction-history.html', context)

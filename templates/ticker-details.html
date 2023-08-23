@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <h1>{{ ticker.company_name }}: ${{ price|floatformat:2 }}</h1>
-    <p>Company info goes here</p>
+    <h1>{{ ticker.name }} ({{ ticker.symbol }}): ${{ live_price|floatformat:2 }}</h1>
+    <p>current price: {{ ticker.live_price }} {{ ticker.currency }}</p>
+    <p>Market Cap: {{ ticker.market_cap }}</p>
+    <p>Short ratio: {{ ticker.short_ratio }}</p>
+    <p></p>
+    <p>sector: {{ ticker.sector }}</p>
+    <p>industry: {{ ticker.industry }}</p>
+    <p>employees: {{ ticker.employees }}</p>
+    <p>{{ ticker.summary }}</p>
+    <p><a href="{{ ticker.website }}">{{ ticker.website }}</a></p>
+
     {% if request.user.is_authenticated %}
-        <label for="portfolio_list">Add to :</label>
-        <select name="portfolio_id" id="portfolio_id">
-            <option value="">Select Portfolio</option>
-            {% for portfolio in request.user.portfolio_set.all %}
-                <option value="{{ portfolio.pk }}">{{ portfolio.name }}</option>
-            {% endfor %}
-        </select>
-        <a href="{% url 'create_position' pk=ticker.pk %}">Add position</a>
+        <a href="{% url 'create_position' pk=ticker.pk %}">Create position</a>
     {% else %}
         <a href="{% url 'login' %}">Login</a> or <a href="{% url 'signup' %}">Register</a> to add {{ ticker.symbol }} to
         your portfolio

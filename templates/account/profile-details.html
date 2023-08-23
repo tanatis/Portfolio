@@ -6,6 +6,7 @@
         <p><span>Name:</span>
             {% if object.first_name and object.last_name %}{{ object.first_name }} {{ object.last_name }}{% endif %}</p>
         {% if object.pk == request.user.pk %}
+            <p><a href="{% url 'transactions history' pk=object.pk %}">Transaction history</a></p>
             <p><a href="{% url 'profile edit' pk=object.pk %}">Edit profile</a></p>
             <p><a href="{% url 'change password' %}">Change password</a></p>
             <p><a href="{% url 'delete account' pk=user.pk %}">Delete account</a></p>

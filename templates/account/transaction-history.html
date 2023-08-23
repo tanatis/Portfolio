@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+    <ul>
+        {% if transaction_history %}
+            {% for transaction in transaction_history %}
+                <li>{{ transaction.date_added }} |
+                    {% if transaction.ticker %}{{ transaction.ticker }}{% else %}CASH{% endif %}
+                    | {{ transaction.operation_type }} | {{ transaction.count }} | {{ transaction.price }}</li>
+            {% endfor %}
+        {% else %}
+            <li>No transactions yet</li>
+        {% endif %}
+    </ul>
+
+{% endblock %}

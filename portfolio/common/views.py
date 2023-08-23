@@ -1,10 +1,11 @@
 from django.db.models import Q
 from django.shortcuts import render
-from yahoo_fin.stock_info import get_live_price
 
 from portfolio.common.forms import SearchTickerForm
 from portfolio.common.models import Ticker
 
+# https://pypi.org/project/yfinance/
+import yfinance as yf
 
 # TODO: https://stockanalysis.com/list/nasdaq-stocks/
 
@@ -23,11 +24,6 @@ def index(request):
             Q(symbol__icontains=search_pattern) | Q(company_name__icontains=search_pattern)
         )
 
-    # Getting the current price
-    # for ticker in search_result:
-    #     ticker.price = get_live_price(ticker.symbol)
-
-    #print(search_result)
     context = {
         'tickers_count': all_tickers.count(),
         'search_result': search_result,
@@ -38,11 +34,22 @@ def index(request):
 
 def ticker_details(request, symbol):
     ticker = Ticker.objects.filter(symbol__exact=symbol).get()
-    price = get_live_price(ticker.symbol)
+
+    current_ticker = yf.Ticker(ticker.symbol)
+
+    ticker.name = current_ticker.info['shortName']
+    ticker.website = current_ticker.info['website']
+    ticker.live_price = current_ticker.info['currentPrice']
+    ticker.currency = current_ticker.info['financialCurrency']
+    ticker.industry = current_ticker.info['industry']
+    ticker.sector = current_ticker.info['sector']
+    ticker.summary = current_ticker.info['longBusinessSummary']
+    ticker.employees = current_ticker.info['fullTimeEmployees']
+    ticker.market_cap = current_ticker.info['marketCap']
+    ticker.short_ratio = current_ticker.info['shortRatio']
 
     context = {
         'ticker': ticker,
-        'price': price,
     }
     return render(request, 'ticker-details.html', context)
 

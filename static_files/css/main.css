@@ -4,37 +4,37 @@ header nav ul {display: flex; list-style: none; gap: 3rem;}
 .portfolio-row {display: flex; list-style: none; border: 1px solid black;}
 .portfolio-cell {width: 150px; text-align: center;}
 
-/*.accordion {*/
-/*  width: 100%;*/
-/*  margin: 0 auto;*/
-/*}*/
+.accordion {
+  width: 100%;
+  margin: 0 auto;
+}
 .accordion-toggle {
   border-bottom: 1px solid #cccccc;
   cursor: pointer;
   margin: 0;
-  padding: 0px 0;
+  padding: 0;
   position: relative;
 }
 .accordion-toggle.active:after {
-  content:"";
+  content:"-";
   position:absolute;
-  left:0;
-  top:8px;
+  left:5px;
+  top:0;
   width:0;
   height:0;
-  border-bottom:5px solid #f00;
-  border-left:5px solid rgba(0,0,0,0);
-  border-right:5px solid rgba(0,0,0,0);
+  /*border-bottom:5px solid #f00;*/
+  /*border-left:5px solid rgba(0,0,0,0);*/
+  /*border-right:5px solid rgba(0,0,0,0);*/
 }
-.accordion-toggle:before { content:"";
+.accordion-toggle:before { content:"+";
   position:absolute;
-  left:0;
-  top:8px;
+  left:5px;
+  top:0;
   width:0;
   height:0;
-  border-top:5px solid #000;
-  border-left:5px solid rgba(0,0,0,0);
-  border-right:5px solid rgba(0,0,0,0);
+  /*border-top:5px solid #000;*/
+  /*border-left:5px solid rgba(0,0,0,0);*/
+  /*border-right:5px solid rgba(0,0,0,0);*/
 }
 .accordion-toggle.active:before {
   display:none;
@@ -42,6 +42,6 @@ header nav ul {display: flex; list-style: none; gap: 3rem;}
 .accordion-content {
   display: none;
 }
-.accordion-toggle.active {
-  color: #ff0000;
-}
+/*.accordion-toggle.active {*/
+/*  color: #ff0000;*/
+/*}*/

@@ -27,4 +27,3 @@ class PositionHistory(models.Model):
     date_added = models.DateField(blank=True, null=True)
     count = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
-    #info = models.CharField(blank=True, null=True, max_length=100)
