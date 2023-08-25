@@ -9,6 +9,9 @@ from django.views import generic as views
 from portfolio.account.forms import AppUserCreationForm, ProfileEditForm, AppUserDeleteForm
 from portfolio.account.models import Profile, AppUserHistory
 
+from rest_framework import generics as api_views, serializers
+from rest_framework.permissions import IsAuthenticated
+
 UserModel = get_user_model()
 
 
@@ -97,11 +100,36 @@ def user_delete(request, pk):
     return render(request, 'account/user-delete.html', context)
 
 
-def account_history(request, pk):
-    transaction_history = AppUserHistory.objects.filter(to_user_id=request.user.pk)
+class AccountHistoryListView(views.ListView):
+    model = AppUserHistory
+    template_name = 'account/transaction-history.html'
+    context_object_name = 'transaction_history'
 
-    context = {
-        'transaction_history': transaction_history,
-    }
+    def get_queryset(self):
+        return AppUserHistory.objects.filter(to_user_id=self.request.user.pk)
 
-    return render(request, 'account/transaction-history.html', context)
+
+# def account_history(request, pk):
+#     transaction_history = AppUserHistory.objects.filter(to_user_id=request.user.pk)
+#
+#     context = {
+#         'transaction_history': transaction_history,
+#     }
+#
+#     return render(request, 'account/transaction-history.html', context)
+
+
+class AppUserHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppUserHistory
+        #fields = ('date_added', 'operation_type', 'ticker', 'count', 'price')
+        fields = '__all__'
+
+
+class AppUserHistoryListView(api_views.ListAPIView):
+    queryset = AppUserHistory.objects.all()
+    serializer_class = AppUserHistorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(to_user=self.request.user)

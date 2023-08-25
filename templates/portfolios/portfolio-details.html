@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block page_content %}
+
+    <script>
+        window.URLS = {
+            portfolio: '{% url 'details_portfolio_api' pk=portfolio.pk %}',
+        }
+    </script>
 
     <h2>Portfolio: {{ portfolio.name }}</h2>
     <span><a href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
@@ -50,7 +57,22 @@
             <div class="portfolio-cell">{{ portfolio.cash }}</div>
         </div>
     </div>
+    <br><br><br><br><br><br>
+    {#####################################################}
+    <div id="portfolio-container" class="portfolio accordion">
+        <div class="portfolio-header">
+            <div class="portfolio-cell">Ticker</div>
+            <div class="portfolio-cell">shares count</div>
+            <div class="portfolio-cell">price per share</div>
+            <div class="portfolio-cell">total invested</div>
+            <div class="portfolio-cell">current price</div>
+            <div class="portfolio-cell">gain / loss</div>
+        </div>
+        <div id="loader">Loading ...</div>
+    </div>
 
 
+
+    <script src="{% static 'js/load-portfolio.js' %}"></script>
 
 {% endblock %}

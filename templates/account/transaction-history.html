@@ -1,16 +1,68 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <ul>
-        {% if transaction_history %}
-            {% for transaction in transaction_history %}
-                <li>{{ transaction.date_added }} |
-                    {% if transaction.ticker %}{{ transaction.ticker }}{% else %}CASH{% endif %}
-                    | {{ transaction.operation_type }} | {{ transaction.count }} | {{ transaction.price }}</li>
-            {% endfor %}
-        {% else %}
-            <li>No transactions yet</li>
-        {% endif %}
-    </ul>
+    <script>
+        window.URLS = {
+            history: '{% url "transactions history api" %}'
+        }
+    </script>
+
+{#    <ul>#}
+{#        {% if transaction_history %}#}
+{#            {% for transaction in transaction_history %}#}
+{#                <li>{{ transaction.date_added }} |#}
+{#                    {% if transaction.ticker %}{{ transaction.ticker }}{% else %}CASH{% endif %}#}
+{#                    | {{ transaction.operation_type }} | {{ transaction.count }} | {{ transaction.price }}</li>#}
+{#            {% endfor %}#}
+{#        {% else %}#}
+{#            <li>No transactions yet</li>#}
+{#        {% endif %}#}
+{#    </ul>#}
+
+    <div id="api-history"></div>
+
+    <script>
+        async function reloadHistory() {
+            const response = await fetch(window.URLS.history);
+            const results = await response.json();
+
+            const ul = document.createElement('ol');
+            for (const history of results) {
+                const listItem = document.createElement('li');
+                listItem.innerText = `${history.date_added} | ${history.operation_type} | ${history.ticker} | ${history.count} | ${history.price}`
+                ul.appendChild(listItem);
+
+            }
+
+            const historyRoot = document.getElementById('api-history');
+
+            historyRoot.innerHTML = '';
+            historyRoot.appendChild(ul);
+        }
+
+        reloadHistory()
+    </script>
+
+{#    <script>#}
+{#        async function reloadHistory() {#}
+{#            const response = await fetch(window.URLS.history);#}
+{#            const histories = await response.json()#}
+{##}
+{#            const ul = document.createElement('ul')#}
+{#            for (const history in histories) {#}
+{#                const listItem = document.createElement('li')#}
+{#                listItem.innerText = `${history.date_added} | ${history.operation_type}`#}
+{##}
+{#                ul.appendChild(listItem);#}
+{#            }#}
+{##}
+{#            const historyDiv = document.getElementById('api_history');#}
+{#            historyDiv.innerHTML = '';#}
+{#            historyDiv.appendChild(ul);#}
+{##}
+{#        }#}
+{##}
+{#        reloadHistory()#}
+{#    </script>#}
 
 {% endblock %}
