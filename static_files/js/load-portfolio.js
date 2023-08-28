@@ -4,13 +4,12 @@ async function reloadPositions() {
 
     const portfolioRoot = document.getElementById('portfolio-container');
     for (const position of positions['positions']) {
-
-
         let addUrl = `/position/${position.id}/add/`
         let sellUrl = `/position/${position.id}/sell/`
-        const divPortfolioRow = document.createElement('div');
-        divPortfolioRow.classList.add('portfolio-row');
-        divPortfolioRow.innerHTML = `
+        const portfolioRow = document.createElement('div');
+        portfolioRow.classList.add('portfolio-row');
+
+        portfolioRow.innerHTML = `
                 <div class="portfolio-cell">${position.ticker_symbol}</div>
                 <div class="portfolio-cell">${position.count}</div>
                 <div class="portfolio-cell">${position.avg_price.toFixed(2)}</div>
@@ -19,8 +18,24 @@ async function reloadPositions() {
                 <div class="portfolio-cell">${position.change.toFixed(2)}%</div>
                 <div class="portfolio-cell"><a href="${addUrl}">Add</a> / <a href="${sellUrl}">Sell</a></div>
                 `
-        portfolioRoot.appendChild(divPortfolioRow);
-
+        portfolioRoot.appendChild(portfolioRow);
+        if (position['position_history'].length > 1) {
+            portfolioRow.classList.add('accordion-toggle');
+            accordionContent = document.createElement('div');
+            accordionContent.classList.add('accordion-content');
+            for (historyLine of position['position_history']) {
+                historyRow = document.createElement('div');
+                historyRow.classList.add('portfolio-row');
+                historyRow.innerHTML = `
+                        <div class="portfolio-cell">Something 1</div>
+                        <div class="portfolio-cell">Something 2</div>
+                        <div class="portfolio-cell">Something 3</div>
+                        <div class="portfolio-cell">Something 4</div>
+                        `
+                accordionContent.appendChild(historyRow)
+            }
+            portfolioRoot.appendChild(accordionContent);
+        }
     }
 
     //portfolioRoot.innerHTML = '';

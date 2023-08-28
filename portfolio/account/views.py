@@ -5,6 +5,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.views import generic as views
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from portfolio.account.forms import AppUserCreationForm, ProfileEditForm, AppUserDeleteForm
 from portfolio.account.models import Profile, AppUserHistory
@@ -122,14 +124,31 @@ class AccountHistoryListView(views.ListView):
 class AppUserHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUserHistory
-        #fields = ('date_added', 'operation_type', 'ticker', 'count', 'price')
+        # fields = ('date_added', 'operation_type', 'ticker', 'count', 'price')
         fields = '__all__'
+
+
+class AccountHistoryPagination(PageNumberPagination):
+    page_size = 15
+    #page_size_query_param = 'page_size'
 
 
 class AppUserHistoryListView(api_views.ListAPIView):
     queryset = AppUserHistory.objects.all()
     serializer_class = AppUserHistorySerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = AccountHistoryPagination
 
     def get_queryset(self):
         return self.queryset.filter(to_user=self.request.user)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

@@ -70,7 +70,7 @@ class PortfolioDetailsApiView(api_views.RetrieveAPIView):
                 position.change = ((position.current_price - position.avg_price) / position.avg_price) * 100
             else:
                 position.change = 0  # Handle division by zero or undefined avg_price case
-
+        print(portfolio.position_set.all)
         return portfolio
 
 

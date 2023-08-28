@@ -4,6 +4,11 @@ header nav ul {display: flex; list-style: none; gap: 3rem;}
 .portfolio-row {display: flex; list-style: none; border: 1px solid black;}
 .portfolio-cell {width: 150px; text-align: center;}
 
+.history {width: 70%;}
+.history-row {width: 100%; display: flex; justify-content: space-between;}
+.history-cell {text-align: center; width: 20%;}
+
+.pagination-link {border: 1px solid grey; padding: 5px; margin: 5px;}
 .accordion {
   width: 100%;
   margin: 0 auto;
