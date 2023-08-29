@@ -27,10 +27,9 @@ async function reloadPositions() {
                 historyRow = document.createElement('div');
                 historyRow.classList.add('portfolio-row');
                 historyRow.innerHTML = `
-                        <div class="portfolio-cell">Something 1</div>
-                        <div class="portfolio-cell">Something 2</div>
-                        <div class="portfolio-cell">Something 3</div>
-                        <div class="portfolio-cell">Something 4</div>
+                        <div class="portfolio-cell">${historyLine.date_added}</div>
+                        <div class="portfolio-cell">${historyLine.count < 0 ? 'sell' : 'buy'} ${historyLine.count}</div>
+                        <div class="portfolio-cell">${historyLine.price}</div>
                         `
                 accordionContent.appendChild(historyRow)
             }
@@ -45,6 +44,8 @@ async function reloadPositions() {
     bottomRow.classList.add('portfolio-row')
     bottomRow.innerHTML = `
             <div class="portfolio-cell">Cash:</div>
+            <div class="portfolio-cell"></div>
+            <div class="portfolio-cell"></div>
             <div class="portfolio-cell"></div>
             <div class="portfolio-cell"></div>
             <div class="portfolio-cell">${positions.cash.toFixed(2)}</div>

@@ -69,6 +69,6 @@ class AppUserHistory(models.Model):
         max_length=8
     )
     ticker = models.CharField(blank=True, null=True, max_length=5)
-    date_added = models.DateField()
+    date_added = models.DateField(auto_now_add=True)
     count = models.FloatField(blank=True, null=True)
     price = models.FloatField()

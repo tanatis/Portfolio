@@ -1,6 +1,6 @@
 from django import forms
 
-from portfolio.stocks_portfolio.models import Portfolio, CashTransaction
+from portfolio.stocks_portfolio.models import Portfolio
 
 
 class AddPortfolioForm(forms.ModelForm):
@@ -20,7 +20,7 @@ class DeletePortfolioForm(forms.ModelForm):
         return self.instance
 
 
-class CashTransactionForm(forms.ModelForm):
-    class Meta:
-        model = CashTransaction
-        fields = ('operation', 'amount')
+# class CashTransactionForm(forms.ModelForm):
+#     class Meta:
+#         model = CashTransaction
+#         fields = ('operation', 'amount')

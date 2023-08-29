@@ -9,6 +9,25 @@ header nav ul {display: flex; list-style: none; gap: 3rem;}
 .history-cell {text-align: center; width: 20%;}
 
 .pagination-link {border: 1px solid grey; padding: 5px; margin: 5px;}
+
+.cash-form {display: none;}
+.cash-form.visible {display: block;}
+.alert.alert-warning {color: red;}
+.btn {background-color: #e1ecf4;
+    border-radius: 3px;
+    border: 1px solid #7aa7c7;
+    box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #39739d;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 1.15385;
+    margin: 0;
+    padding: 5px 0.8em;
+    white-space: nowrap;}
+
+
+
 .accordion {
   width: 100%;
   margin: 0 auto;
@@ -50,3 +69,58 @@ header nav ul {display: flex; list-style: none; gap: 3rem;}
 /*.accordion-toggle.active {*/
 /*  color: #ff0000;*/
 /*}*/
+
+#loader {position: relative;}
+.loader {position: absolute; top: 0; bottom: 0; left: 0; right: 0;}
+.jimu-primary-loading:before,
+.jimu-primary-loading:after {position: absolute; top: 0; content: '';}
+.jimu-primary-loading:before {left: -19.992px;}
+.jimu-primary-loading:after {left: 19.992px; -webkit-animation-delay: 0.32s !important; animation-delay: 0.32s !important;}
+.jimu-primary-loading:before,
+.jimu-primary-loading:after,
+.jimu-primary-loading {background: #076fe5;
+  -webkit-animation: loading-keys-app-loading 0.8s infinite ease-in-out;
+  animation: loading-keys-app-loading 0.8s infinite ease-in-out;
+  width: 13.6px;
+  height: 32px;
+}
+.jimu-primary-loading {
+  text-indent: -9999em;
+  margin: auto;
+  position: absolute;
+  right: calc(50% - 6.8px);
+  top: calc(50% - 16px);
+  -webkit-animation-delay: 0.16s !important;
+  animation-delay: 0.16s !important;
+}
+@-webkit-keyframes loading-keys-app-loading {
+  0%,
+  80%,
+  100% {
+    opacity: .75;
+    box-shadow: 0 0 #076fe5;
+    height: 32px;
+  }
+
+  40% {
+    opacity: 1;
+    box-shadow: 0 -8px #076fe5;
+    height: 40px;
+  }
+}
+
+@keyframes loading-keys-app-loading {
+  0%,
+  80%,
+  100% {
+    opacity: .75;
+    box-shadow: 0 0 #076fe5;
+    height: 32px;
+  }
+  40% {
+    opacity: 1;
+    box-shadow: 0 -8px #076fe5;
+    height: 40px;
+  }
+}
+

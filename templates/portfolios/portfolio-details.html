@@ -8,57 +8,79 @@
         }
     </script>
 
-    <h2>Portfolio: {{ portfolio.name }}</h2>
-    <span><a href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
-    <span><a href="{% url 'add_withdraw_cash' pk=portfolio.pk %}">Deposit / Withdraw</a></span>
-
-    <div class="portfolio accordion">
-        <div class="portfolio-header">
-            <div class="portfolio-cell">Ticker</div>
-            <div class="portfolio-cell">shares count</div>
-            <div class="portfolio-cell">price per share</div>
-            <div class="portfolio-cell">total invested</div>
-            <div class="portfolio-cell">current price</div>
-            <div class="portfolio-cell">gain / loss</div>
-        </div>
-
-        {% for position in positions %}
-            <div class="portfolio-row {% if position.positionhistory_set.all|length > 1 %}accordion-toggle{% endif %}">
-                <div class="portfolio-cell">{{ position.ticker }}</div>
-                <div class="portfolio-cell">{{ position.count }}</div>
-                <div class="portfolio-cell">{{ position.avg_price|floatformat:2 }}</div>
-                <div class="portfolio-cell">{{ position.price }}</div>
-                <div class="portfolio-cell">{{ position.current_price|floatformat:2 }}</div>
-                <div class="portfolio-cell">{{ position.change|floatformat:2 }}%</div>
-                <div class="portfolio-cell">
-                    <a href="{% url 'add_to_position' pk=position.pk %}">Add</a> /
-                    <a href="{% url 'sell_position' pk=position.pk %}">Sell</a>
-                </div>
-            </div>
-            {% if position.positionhistory_set.all|length > 1 %}
-                <div class="accordion-content">
-                    {% for history in position.positionhistory_set.all %}
-                        <div class="portfolio-row">
-                            <div class="portfolio-cell">{{ history.date_added }}</div>
-                            <div class="portfolio-cell">{% if history.count < 0 %}Sell {{ history.count }}{% else %}
-                                Buy
-                                {{ history.count }}{% endif %}</div>
-                            <div class="portfolio-cell">{{ history.price }}</div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endfor %}
-
-        <div class="portfolio-row">
-            <div class="portfolio-cell">Cash:</div>
-            <div class="portfolio-cell"></div>
-            <div class="portfolio-cell"></div>
-            <div class="portfolio-cell">{{ portfolio.cash }}</div>
-        </div>
-    </div>
-    <br><br><br><br><br><br>
+    {#    <div class="portfolio accordion">#}
+    {#        <div class="portfolio-header">#}
+    {#            <div class="portfolio-cell">Ticker</div>#}
+    {#            <div class="portfolio-cell">shares count</div>#}
+    {#            <div class="portfolio-cell">price per share</div>#}
+    {#            <div class="portfolio-cell">total invested</div>#}
+    {#            <div class="portfolio-cell">current price</div>#}
+    {#            <div class="portfolio-cell">gain / loss</div>#}
+    {#        </div>#}
+    {##}
+    {#        {% for position in positions %}#}
+    {#            <div class="portfolio-row {% if position.positionhistory_set.all|length > 1 %}accordion-toggle{% endif %}">#}
+    {#                <div class="portfolio-cell">{{ position.ticker }}</div>#}
+    {#                <div class="portfolio-cell">{{ position.count }}</div>#}
+    {#                <div class="portfolio-cell">{{ position.avg_price|floatformat:2 }}</div>#}
+    {#                <div class="portfolio-cell">{{ position.price }}</div>#}
+    {#                <div class="portfolio-cell">{{ position.current_price|floatformat:2 }}</div>#}
+    {#                <div class="portfolio-cell">{{ position.change|floatformat:2 }}%</div>#}
+    {#                <div class="portfolio-cell">#}
+    {#                    <a href="{% url 'add_to_position' pk=position.pk %}">Add</a> /#}
+    {#                    <a href="{% url 'sell_position' pk=position.pk %}">Sell</a>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#            {% if position.positionhistory_set.all|length > 1 %}#}
+    {#                <div class="accordion-content">#}
+    {#                    {% for history in position.positionhistory_set.all %}#}
+    {#                        <div class="portfolio-row">#}
+    {#                            <div class="portfolio-cell">{{ history.date_added }}</div>#}
+    {#                            <div class="portfolio-cell">{% if history.count < 0 %}Sell {{ history.count }}{% else %}#}
+    {#                                Buy#}
+    {#                                {{ history.count }}{% endif %}</div>#}
+    {#                            <div class="portfolio-cell">{{ history.price }}</div>#}
+    {#                        </div>#}
+    {#                    {% endfor %}#}
+    {#                </div>#}
+    {#            {% endif %}#}
+    {#        {% endfor %}#}
+    {##}
+    {#        <div class="portfolio-row">#}
+    {#            <div class="portfolio-cell">Cash:</div>#}
+    {#            <div class="portfolio-cell"></div>#}
+    {#            <div class="portfolio-cell"></div>#}
+    {#            <div class="portfolio-cell">{{ portfolio.cash }}</div>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    <br><br><br><br><br><br>#}
     {#####################################################}
+    <h2>Portfolio: {{ portfolio.name }}</h2>
+
+    {% if messages %}
+        <div class="alert alert-warning">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <span><a class="btn" href="{% url 'delete_portfolio' pk=portfolio.pk %}">Delete</a></span>
+    <span><a id="toggle-link" class="btn">Cash</a></span>
+    <br>
+    <div id="cash-form" class="cash-form">
+        <form id="deposit-withdraw-form" method="post" action="{% url 'deposit_withdraw' pk=portfolio.pk %}">
+            {% csrf_token %}
+            <label for="operation">Operation:</label>
+            <select name="operation" id="operation">
+                <option value="deposit">Deposit</option>
+                <option value="withdraw">Withdraw</option>
+            </select>
+            <label for="amount">Amount:</label>
+            <input type="number" step="0.01" name="amount" id="amount">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <br>
     <div id="portfolio-container" class="portfolio accordion">
         <div class="portfolio-header">
             <div class="portfolio-cell">Ticker</div>
@@ -68,68 +90,27 @@
             <div class="portfolio-cell">current price</div>
             <div class="portfolio-cell">gain / loss</div>
         </div>
-        <div id="loader">Loading ...</div>
+        <div id="loader">
+            <div class="loader">
+                <div class="justify-content-center jimu-primary-loading"></div>
+            </div>
+        </div>
     </div>
 
-
+    <script src="{% static 'js/load-portfolio.js' %}"></script>
     <script>
-        async function reloadPositions() {
-            const response = await fetch(window.URLS.portfolio);
-            const positions = await response.json();
-
-            const portfolioRoot = document.getElementById('portfolio-container');
-            for (const position of positions['positions']) {
-                let addUrl = `/position/${position.id}/add/`
-                let sellUrl = `/position/${position.id}/sell/`
-                const portfolioRow = document.createElement('div');
-                portfolioRow.classList.add('portfolio-row');
-
-                portfolioRow.innerHTML = `
-                <div class="portfolio-cell">${position.ticker_symbol}</div>
-                <div class="portfolio-cell">${position.count}</div>
-                <div class="portfolio-cell">${position.avg_price.toFixed(2)}</div>
-                <div class="portfolio-cell">${position.price.toFixed(2)}</div>
-                <div class="portfolio-cell">${position.current_price.toFixed(2)}</div>
-                <div class="portfolio-cell">${position.change.toFixed(2)}%</div>
-                <div class="portfolio-cell"><a href="${addUrl}">Add</a> / <a href="${sellUrl}">Sell</a></div>
-                `
-                portfolioRoot.appendChild(portfolioRow);
-                if (position['position_history'].length > 1) {
-                    portfolioRow.classList.add('accordion-toggle');
-                    accordionContent = document.createElement('div');
-                    accordionContent.classList.add('accordion-content');
-                    for (historyLine of position['position_history']) {
-                        historyRow = document.createElement('div');
-                        historyRow.classList.add('portfolio-row');
-                        historyRow.innerHTML = `
-                        <div class="portfolio-cell">Something 1</div>
-                        <div class="portfolio-cell">Something 2</div>
-                        <div class="portfolio-cell">Something 3</div>
-                        <div class="portfolio-cell">Something 4</div>
-                        `
-                        accordionContent.appendChild(historyRow)
-                    }
-                    portfolioRoot.appendChild(accordionContent);
-                }
-            }
-
-            //portfolioRoot.innerHTML = '';
-            const loader = document.getElementById('loader');
-            loader.remove();
-            const bottomRow = document.createElement('div')
-            bottomRow.classList.add('portfolio-row')
-            bottomRow.innerHTML = `
-            <div class="portfolio-cell">Cash:</div>
-            <div class="portfolio-cell"></div>
-            <div class="portfolio-cell"></div>
-            <div class="portfolio-cell">${positions.cash.toFixed(2)}</div>
-            `
-            portfolioRoot.appendChild(bottomRow)
-        }
-
-        reloadPositions()
-
+        const toggleLink = document.getElementById('toggle-link');
+        const cashForm = document.getElementById('cash-form');
+        toggleLink.addEventListener("click", function () {
+            cashForm.classList.toggle("visible");
+        });
     </script>
-    {#    <script src="{% static 'js/load-portfolio.js' %}"></script>#}
-
+    <script>
+        // Use event delegation for accordion toggle
+        $(document).on('click', '.accordion-toggle', function () {
+            $(this).next().slideToggle('600');
+            $(".accordion-content").not($(this).next()).slideUp('600');
+            $(this).toggleClass('active').siblings().removeClass('active');
+        });
+    </script>
 {% endblock %}

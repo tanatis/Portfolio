@@ -180,9 +180,12 @@ def sell_position(request, pk):
                     operation_type='sell',
                     ticker=position.ticker.symbol,
                     date_added=position.date_added,
-                    count=-count,
+                    count=count * -1,
                     price=price)
                 user_history.save()
+
+                portfolio.cash += count * price
+                portfolio.save()
 
                 return redirect('details_portfolio', pk=portfolio.pk)
 

@@ -134,7 +134,7 @@ class AccountHistoryPagination(PageNumberPagination):
 
 
 class AppUserHistoryListView(api_views.ListAPIView):
-    queryset = AppUserHistory.objects.all()
+    queryset = AppUserHistory.objects.all().order_by('date_added')
     serializer_class = AppUserHistorySerializer
     permission_classes = [IsAuthenticated]
     pagination_class = AccountHistoryPagination
