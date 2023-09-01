@@ -139,6 +139,7 @@ def create_portfolio(request):
     return render(request, 'portfolios/create-portfolio.html', context)
 
 
+@login_required
 def delete_portfolio(request, pk):
     portfolio = Portfolio.objects.get(pk=pk)
 

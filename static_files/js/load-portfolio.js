@@ -16,7 +16,7 @@ async function reloadPositions() {
                 <div class="portfolio-cell">${position.price.toFixed(2)}</div>
                 <div class="portfolio-cell">${position.current_price.toFixed(2)}</div>
                 <div class="portfolio-cell">${position.change.toFixed(2)}%</div>
-                <div class="portfolio-cell"><a href="${addUrl}">Add</a> / <a href="${sellUrl}">Sell</a></div>
+                <div class="portfolio-cell"><a href="${addUrl}">Buy</a> / <a href="${sellUrl}">Sell</a></div>
                 `
         portfolioRoot.appendChild(portfolioRow);
         if (position['position_history'].length > 1) {

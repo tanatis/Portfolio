@@ -1,27 +1,17 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<div>
-    <form action="{% url 'index' %}" method="get">
-        {{ form }}
-        <button>Search</button>
-        {% csrf_token %}
-    </form>
-</div>
-<ol>
-    {% for ticker in search_result %}
-        <li><a href="{% url 'ticker_details' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }}</li>
-    {% endfor %}
-</ol>
-
-<hr>
-
-{#<ol>#}
-{#    {% for ticker in all_tickers %}#}
-{#        <li>{{ ticker.symbol }} - {{ ticker.company_name }} ({{ ticker.index }})</li>#}
-{#    {% endfor %}#}
-{#</ol>#}
-
-{{ tickers_count }}
-<hr>
+    <div class="search">
+        <h1>Search in our {{ tickers_count }} stocks database</h1>
+        <form action="{% url 'index' %}" method="get" class="form">
+            {{ form }}
+            <button class="form-btn">Search</button>
+            {% csrf_token %}
+        </form>
+    </div>
+    <ol>
+        {% for ticker in search_result %}
+            <li><a href="{% url 'ticker_details' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }}</li>
+        {% endfor %}
+    </ol>
 
 {% endblock %}

@@ -9,7 +9,6 @@ async function reloadHistory(url = window.URLS.history) {
     for (const history of results) {
         const historyRow = document.createElement('div');
         historyRow.classList.add('history-row');
-        //historyRow.innerHTML = ''
         historyRow.innerHTML = `
                 <div class="history-cell">${history.date_added}</div>
                 <div class="history-cell">${history.ticker ? history.ticker : 'CASH'}</div>
@@ -17,8 +16,6 @@ async function reloadHistory(url = window.URLS.history) {
                 <div class="history-cell">${history.count ? history.count : '--'}</div>
                 <div class="history-cell">${history.price.toFixed(2)}</div>
                 `
-        //listItem.innerText = `${history.date_added} | ${history.ticker ? history.ticker : 'CASH'} | ${history.operation_type} | ${history.count ? history.count : '--'} | ${history.price}`
-        //.appendChild(listItem);
         historyRoot.appendChild(historyRow);
     }
 
@@ -40,7 +37,8 @@ async function reloadHistory(url = window.URLS.history) {
         pageLink.href = 'javascript:void(0)';
         pageLink.innerText = i.toString();
         if (url.includes(`page=${i}`)) {
-            pageLink.style.fontWeight = 'bold';
+            // pageLink.style.fontWeight = 'bold';
+            pageLink.classList.add('pagination-active')
         }
         pageLink.addEventListener('click', () => {
             const newUrl = url.includes('?') ? url.replace(/page=\d+/i, `page=${i}`) : `${url}?page=${i}`;

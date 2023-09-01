@@ -21,22 +21,21 @@
     {#        {% endif %}#}
     {#    </ul>#}
 
+    <h2 class="center">Transactions history</h2>
     <div class="history">
         <div class="history-header">
-            <div class="history-row">
-                <div class="history-cell">Date</div>
-                <div class="history-cell">Ticker</div>
-                <div class="history-cell">Operation</div>
-                <div class="history-cell">Count</div>
-                <div class="history-cell">Amount</div>
-            </div>
+            <div class="history-cell">Date</div>
+            <div class="history-cell">Ticker</div>
+            <div class="history-cell">Operation</div>
+            <div class="history-cell">Count</div>
+            <div class="history-cell">Amount</div>
         </div>
         <div id="api-history">
 
         </div>
     </div>
 
-    <div id="pagination-links"></div>
+    <div id="pagination-links" class="pagination"></div>
 
     <script src="{% static 'js/transactions-history.js' %}"></script>
 
