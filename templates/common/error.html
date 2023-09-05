@@ -2,5 +2,12 @@
 {% block page_content %}
 
     <h1>Error</h1>
+    {% if messages %}
+        <div class="alert alert-warning">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
 
 {% endblock %}

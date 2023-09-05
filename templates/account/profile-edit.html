@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <form action="{% url 'profile edit' pk=object.pk %}" method="post">
-        {{ form }}
-        <button>Edit</button>
-        {% csrf_token %}
-    </form>
+    <div class="form-wrapper">
+        <form action="{% url 'profile edit' pk=object.pk %}" method="post" class="form">
+            <h3>Edit your profile</h3>
+            <div class="form-line">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+            </div>
+            <div class="form-line">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+            </div>
+            <div class="form-line">
+                <button class="form-btn">Edit</button>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
 {% endblock %}

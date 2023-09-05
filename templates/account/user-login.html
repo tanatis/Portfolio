@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <form action="{% url 'login' %}" method="post">
-            <div class="lib-form-line">
+    <div class="form-wrapper">
+        <form action="{% url 'login' %}" method="post" class="form">
+            <h3>Login</h3>
+            <div class="form-line">
                 {{ form.username.error }}
+                {{ form.username.label_tag }}
                 {{ form.username }}
             </div>
-            <div class="lib-form-line">
+            <div class="form-line">
                 {{ form.password.error }}
+                {{ form.password.label_tag }}
                 {{ form.password }}
             </div>
-            <button class="lib-form-btn">Login</button>
+            <div class="form-line">
+                <button class="form-btn">Login</button>
+            </div>
             {% csrf_token %}
         </form>
-
+    </div>
 {% endblock %}

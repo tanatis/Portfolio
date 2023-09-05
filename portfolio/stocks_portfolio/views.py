@@ -149,6 +149,16 @@ def delete_portfolio(request, pk):
         form = DeletePortfolioForm(request.POST, instance=portfolio)
         if form.is_valid():
             form.save()
+
+            user_history = AppUserHistory(
+                to_user=request.user,
+                operation_type='withdraw',
+                ticker=None,
+                #date_added=portfolio.date_added,
+                count=None,
+                price=portfolio.cash)
+            user_history.save()
+
             return redirect('index')
 
     context = {

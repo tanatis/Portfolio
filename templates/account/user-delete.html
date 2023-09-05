@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <form action="{% url 'delete account' pk=user.pk %}" method="post">
+    <div class="form-wrapper">
+    <form action="{% url 'delete account' pk=user.pk %}" method="post" class="form">
+        <h3>Are you sure you want to delete your account ?</h3>
         {{ form }}
-        <button>Delete</button>
+        <div class="form-line">
+            <button class="form-btn">Delete</button>
+        </div>
+
         {% csrf_token %}
     </form>
+    </div>
 
 {% endblock %}

@@ -13,7 +13,7 @@
 
 <header>
     <nav>
-        <div class="logo"><img src="{% static 'images/portfolio2.jpg' %}" alt="Portfolio"></div>
+        <div class="logo"><a href="{% url 'index' %}"><img src="{% static 'images/portfolio2.jpg' %}" alt="Portfolio"></a></div>
         <div class="nav-left">
             <ul>
                 {% if request.user.is_authenticated %}
@@ -50,7 +50,7 @@
                     </div>
                 {% else %}
                     <div class="nav-left">
-                        <a href="{% url 'index' %}">Home</a>
+{#                        <a href="{% url 'index' %}">Home</a>#}
                     </div>
                     <div class="nav-right">
                         <a href="{% url 'signup' %}">Register</a>
@@ -75,9 +75,9 @@
 </div>
 <footer>
     <div class="footer-wrap">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+        <span>Developed by tanatis</span>
+        <a href="https://www.linkedin.com/in/ivan-petkov-a41947176/"><img src="{% static 'images/linkedin.png' %}" alt="LinkedIn"></a>
+        <a href="https://github.com/tanatis"><img src="{% static 'images/github.png' %}" alt="gitHub"></a>
     </div>
 </footer>
 </body>

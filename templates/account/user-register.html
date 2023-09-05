@@ -1,33 +1,39 @@
 {% extends 'base.html' %}
 {% block page_content %}
 
-    <form action="{% url 'signup' %}" method="post">
-            <div class="lib-form-line">
+    <div class="form-wrapper">
+        <form action="{% url 'signup' %}" method="post" class="form">
+            <h3>Registration form</h3>
+            <div class="form-line">
                 {{ form.username.errors }}
                 {{ form.username.label_tag }}
                 {{ form.username }}
                 {{ form.username.help_text }}
             </div>
-            <div class="lib-form-line">
+            <div class="form-line">
                 {{ form.email.errors }}
+                {{ form.email.label_tag }}
                 {{ form.email }}
                 {{ form.email.help_text }}
             </div>
-            <div class="lib-form-line">
+            <div class="form-line">
                 {{ form.password1.errors }}
                 {{ form.password2.errors }}
+                {{ form.password1.label_tag }}
                 {{ form.password1 }}
             </div>
-            <div class="lib-form-line">
+            <div class="form-line">
                 {{ form.password2.label_tag }}
                 {{ form.password2 }}
             </div>
-            <div class="lib-form-line">
+            <div class="form-line contest">
                 {{ form.consent }}
                 {{ form.consent.help_text }}
             </div>
+            <div class="form-line">
+                <button class="form-btn">Register</button>
+            </div>
             {% csrf_token %}
-            <button class="lib-form-btn">Register</button>
         </form>
-
+    </div>
 {% endblock %}

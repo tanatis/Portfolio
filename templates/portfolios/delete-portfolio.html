@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<div>
-    <h3>Are you sure you want to delete portfolio {{ portfolio.name }}?</h3>
-    <form action="{% url 'delete_portfolio' pk=portfolio.pk %}" method="post">
+<div class="form-wrapper">
+    <h3>Are you sure you want to delete portfolio <u>{{ portfolio.name }}</u>?</h3>
+    <form action="{% url 'delete_portfolio' pk=portfolio.pk %}" method="post" class="form">
         {{ form }}
-        <button>Delete</button>
+        <div class="form-line">
+            <button class="form-btn">Delete Portfolio</button>
+        </div>
+
         {% csrf_token %}
     </form>
 </div>

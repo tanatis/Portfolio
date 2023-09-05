@@ -123,3 +123,5 @@ LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 
 LOGOUT_REDIRECT_URL = reverse_lazy('login')
+
+USE_THOUSAND_SEPARATOR = True
