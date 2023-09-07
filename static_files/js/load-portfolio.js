@@ -9,12 +9,14 @@ async function reloadPositions() {
         const portfolioRow = document.createElement('div');
         portfolioRow.classList.add('portfolio-row');
 
+        let change = position.current_price - position.close_price
         portfolioRow.innerHTML = `
                 <div class="portfolio-cell">${position.ticker_symbol}</div>
                 <div class="portfolio-cell">${position.count}</div>
                 <div class="portfolio-cell">${position.avg_price.toFixed(2)}</div>
                 <div class="portfolio-cell">${position.price.toFixed(2)}</div>
                 <div class="portfolio-cell">${position.current_price.toFixed(2)}</div>
+                <div class="portfolio-cell ${change < 0 ? 'red' : 'green'}">${change.toFixed(2)}</div>
                 <div class="portfolio-cell">${position.change.toFixed(2)}%</div>
                 <div class="portfolio-cell"><a href="${addUrl}">Buy</a> / <a href="${sellUrl}">Sell</a></div>
                 `

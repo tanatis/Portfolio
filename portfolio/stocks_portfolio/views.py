@@ -19,6 +19,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
+from portfolio.stocks_portfolio.tiingo import get_price_data
+
 
 class PositionHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,6 +31,7 @@ class PositionHistorySerializer(serializers.ModelSerializer):
 class PositionSerializer(serializers.ModelSerializer):
     position_history = PositionHistorySerializer(source='positionhistory_set', many=True, read_only=True)
     current_price = serializers.SerializerMethodField()
+    close_price = serializers.SerializerMethodField()
     change = serializers.SerializerMethodField()
     ticker_symbol = serializers.SerializerMethodField()
 
@@ -46,6 +49,10 @@ class PositionSerializer(serializers.ModelSerializer):
 
     def get_ticker_symbol(self, position):
         return position.ticker.symbol
+
+    def get_close_price(self, position):
+        price_data = get_price_data(position.ticker.symbol)
+        return price_data['close']
 
 
 class PortfolioSerializer(serializers.ModelSerializer):
@@ -69,6 +76,8 @@ class PortfolioDetailsApiView(api_views.RetrieveAPIView):
 
         positions = portfolio.position_set.all()  # Fetch positions
         for position in positions:
+            position.get_price = get_price_data(position.ticker.symbol)
+            position.close_price = position.get_price['close']
             position.current_price = get_live_price(position.ticker.symbol)
             if position.avg_price != 0:
                 position.change = ((position.current_price - position.avg_price) / position.avg_price) * 100
@@ -90,6 +99,9 @@ class PortfolioDetailsView(views.DetailView):
         for position in positions:
             position.current_price = get_live_price(position.ticker.symbol)
             position.change = (position.current_price - position.avg_price) / position.avg_price * 100
+            # position.get_price = get_price_data(position.ticker.symbol)
+            # position.close_price = position.get_price['close']
+            # print(position.close_price)
 
         context['positions'] = positions
         return context
@@ -211,6 +223,7 @@ def delete_portfolio(request, pk):
 #     return render(request, 'portfolios/add-withdraw.html', context)
 
 
+# TODO Fix error when amount 0 or empty
 def deposit_withdraw_view(request, pk):
     portfolio = Portfolio.objects.get(pk=pk, user_id=request.user.id)
 

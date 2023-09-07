@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render
+from yahoo_fin.stock_info import get_day_gainers
 
 from portfolio.common.forms import SearchTickerForm
 from portfolio.common.models import Ticker
@@ -24,10 +25,18 @@ def index(request):
             Q(symbol__icontains=search_pattern) | Q(company_name__icontains=search_pattern)
         )
 
+    gainers_data = {}
+    gainers = get_day_gainers()
+    for i in gainers.head(5).index:
+        symbol = gainers['Symbol'][i]
+        change = gainers['% Change'][i]
+        gainers_data[symbol] = change
+
     context = {
         'tickers_count': all_tickers.count(),
         'search_result': search_result,
         'form': form,
+        'gainers': gainers_data,
     }
     return render(request, 'index.html', context)
 

@@ -13,5 +13,9 @@
             <li><a href="{% url 'ticker_details' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }}</li>
         {% endfor %}
     </ol>
-
+    <hr>
+    Top gainers:
+    {% for ticker, change in gainers.items %}
+        <p><a href="/ticker/{{ ticker }}/">{{ ticker }}</a>: +{{ change }}%</p>
+    {% endfor %}
 {% endblock %}
