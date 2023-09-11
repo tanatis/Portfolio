@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-class DailyStockMovementSerializer(serializers.Serializer):
+class DailyStockMoversSerializer(serializers.Serializer):
     gainers = serializers.DictField()
     losers = serializers.DictField()
     active = serializers.DictField()

@@ -8,7 +8,9 @@ from yahoo_fin.stock_info import get_day_gainers, get_day_losers, get_day_most_a
 from portfolio.common.forms import SearchTickerForm
 from portfolio.common.models import Ticker
 
-from portfolio.common.serializers import DailyStockMovementSerializer
+from portfolio.common.serializers import DailyStockMoversSerializer
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 # https://pypi.org/project/yfinance/
 import yfinance as yf
@@ -17,11 +19,15 @@ import yfinance as yf
 
 
 class IndexAPIView(APIView):
-    @staticmethod
-    def get(request):
+
+    @method_decorator(cache_page(60 * 1, cache='default'))
+    def get(self, request):
+        # all_tickers = Ticker.objects.all()
+        # symbols_list = all_tickers.values_list('symbol', flat=True)
 
         losers = {}
         losers_data = get_day_losers(count=10)
+        print(losers_data)
         for i in losers_data.index:
             symbol = losers_data['Symbol'][i]
             change = losers_data['% Change'][i]
@@ -50,7 +56,7 @@ class IndexAPIView(APIView):
             'active': active,
         }
 
-        serializer = DailyStockMovementSerializer(context)
+        serializer = DailyStockMoversSerializer(context)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -68,35 +74,10 @@ def index(request):
             Q(symbol__icontains=search_pattern) | Q(company_name__icontains=search_pattern)
         )
 
-    # losers = {}
-    # losers_data = get_day_losers(count=10)
-    # for i in losers_data.index:
-    #     symbol = losers_data['Symbol'][i]
-    #     change = losers_data['% Change'][i]
-    #     losers[symbol] = change
-    #
-    # gainers = {}
-    # gainers_data = get_day_gainers(count=10)
-    # for i in gainers_data.index:
-    #     symbol = gainers_data['Symbol'][i]
-    #     change = gainers_data['% Change'][i]
-    #     gainers[symbol] = change
-    #
-    # active = {}
-    # active_data = get_day_most_active(count=10)
-    # for i in active_data.index:
-    #     symbol = active_data['Symbol'][i]
-    #     name = active_data['Name'][i]
-    #     change = active_data['% Change'][i]
-    #     active[symbol] = [name, change]
-
     context = {
         'tickers_count': all_tickers.count(),
         'search_result': search_result,
         'form': form,
-        # 'gainers': gainers,
-        # 'losers': losers,
-        # 'active': active,
     }
     return render(request, 'index.html', context)
 
@@ -170,7 +151,7 @@ def ticker_details(request, symbol):
     ticker = Ticker.objects.filter(symbol__exact=symbol).get()
 
     current_ticker = yf.Ticker(ticker.symbol)
-    # print(current_ticker.info)
+    print(current_ticker.info)
     ticker.name = current_ticker.info['shortName']
     ticker.website = current_ticker.info['website']
     ticker.live_price = current_ticker.info['currentPrice']
