@@ -93,6 +93,14 @@ input[type="email"], input[type="number"], input[type="search"], input[type="tex
 .search .form {width: 80%; margin: 0 auto;}
 .search .form input {width: calc(100% - 85px);}
 
+.daily {display: flex; justify-content: space-around; gap: 1rem;}
+.daily a {color: #076fe5; text-decoration: none;}
+.daily a:hover {text-decoration: underline;}
+.daily ul {list-style: none; text-align: center; padding: 0; margin: 0; width: 33.33%}
+.daily ul li {display: flex; justify-content: space-between; font-size: 0.9rem; padding: 0 0.5rem; margin: 0.5rem 0;}
+.daily span {background-color: #076fe5; color: white; display: block; padding: 0.5rem 0;}
+.daily-movers {width: 85%; overflow: hidden; white-space: nowrap; text-align: left;}
+
 .portfolio {display: flex; flex-direction: column; width: 80%;}
 .portfolio-header {background-color: #076fe5; color: #e1ecf4;}
 .portfolio-header,

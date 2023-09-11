@@ -1,14 +1,57 @@
 from django.db.models import Q
 from django.shortcuts import render
-from yahoo_fin.stock_info import get_day_gainers
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from yahoo_fin.stock_info import get_day_gainers, get_day_losers, get_day_most_active
 
 from portfolio.common.forms import SearchTickerForm
 from portfolio.common.models import Ticker
+
+from portfolio.common.serializers import DailyStockMovementSerializer
 
 # https://pypi.org/project/yfinance/
 import yfinance as yf
 
 # TODO: https://stockanalysis.com/list/nasdaq-stocks/
+
+
+class IndexAPIView(APIView):
+    @staticmethod
+    def get(request):
+
+        losers = {}
+        losers_data = get_day_losers(count=10)
+        for i in losers_data.index:
+            symbol = losers_data['Symbol'][i]
+            change = losers_data['% Change'][i]
+            name = losers_data['Name'][i]
+            losers[i] = [symbol, name, change]
+
+        gainers = {}
+        gainers_data = get_day_gainers(count=10)
+        for i in gainers_data.index:
+            symbol = gainers_data['Symbol'][i]
+            change = gainers_data['% Change'][i]
+            name = gainers_data['Name'][i]
+            gainers[i] = [symbol, name, change]
+
+        active = {}
+        active_data = get_day_most_active(count=10)
+        for i in active_data.index:
+            symbol = active_data['Symbol'][i]
+            name = active_data['Name'][i]
+            change = active_data['% Change'][i]
+            active[i] = [symbol, name, change]
+
+        context = {
+            'gainers': gainers,
+            'losers': losers,
+            'active': active,
+        }
+
+        serializer = DailyStockMovementSerializer(context)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def index(request):
@@ -25,18 +68,35 @@ def index(request):
             Q(symbol__icontains=search_pattern) | Q(company_name__icontains=search_pattern)
         )
 
-    gainers_data = {}
-    gainers = get_day_gainers()
-    for i in gainers.head(5).index:
-        symbol = gainers['Symbol'][i]
-        change = gainers['% Change'][i]
-        gainers_data[symbol] = change
+    # losers = {}
+    # losers_data = get_day_losers(count=10)
+    # for i in losers_data.index:
+    #     symbol = losers_data['Symbol'][i]
+    #     change = losers_data['% Change'][i]
+    #     losers[symbol] = change
+    #
+    # gainers = {}
+    # gainers_data = get_day_gainers(count=10)
+    # for i in gainers_data.index:
+    #     symbol = gainers_data['Symbol'][i]
+    #     change = gainers_data['% Change'][i]
+    #     gainers[symbol] = change
+    #
+    # active = {}
+    # active_data = get_day_most_active(count=10)
+    # for i in active_data.index:
+    #     symbol = active_data['Symbol'][i]
+    #     name = active_data['Name'][i]
+    #     change = active_data['% Change'][i]
+    #     active[symbol] = [name, change]
 
     context = {
         'tickers_count': all_tickers.count(),
         'search_result': search_result,
         'form': form,
-        'gainers': gainers_data,
+        # 'gainers': gainers,
+        # 'losers': losers,
+        # 'active': active,
     }
     return render(request, 'index.html', context)
 

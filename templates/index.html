@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block page_content %}
+
+    <script>
+        window.URLS = {
+            dailyMovers: '{% url 'index_api' %}',
+        }
+    </script>
+
     <div class="search">
         <h1>Search in our {{ tickers_count }} stocks database</h1>
         <form action="{% url 'index' %}" method="get" class="form">
@@ -10,12 +18,42 @@
     </div>
     <ol>
         {% for ticker in search_result %}
-            <li><a href="{% url 'ticker_details' symbol=ticker.symbol %}">{{ ticker.symbol }}</a> - {{ ticker.company_name }}</li>
+            <li><a href="{% url 'ticker_details' symbol=ticker.symbol %}">{{ ticker.symbol }}</a>
+                - {{ ticker.company_name }}</li>
         {% endfor %}
     </ol>
-    <hr>
-    Top gainers:
-    {% for ticker, change in gainers.items %}
-        <p><a href="/ticker/{{ ticker }}/">{{ ticker }}</a>: +{{ change }}%</p>
-    {% endfor %}
+
+    <div class="daily">
+        <ul id="top-active" class="top-active">
+            <div id="loader">
+                <div class="loader">
+                    <div class="justify-content-center jimu-primary-loading"></div>
+                </div>
+            </div>
+            <span>Most active</span>
+        </ul>
+
+        <ul id="top-gainers" class="top-gainers">
+            <div id="loader">
+                <div class="loader">
+                    <div class="justify-content-center jimu-primary-loading"></div>
+                </div>
+            </div>
+            <span>Top gainers</span>
+        </ul>
+
+        <ul id="top-losers" class="top-losers">
+            <div id="loader">
+                <div class="loader">
+                    <div class="justify-content-center jimu-primary-loading"></div>
+                </div>
+            </div>
+            <span>Top losers</span>
+        </ul>
+    </div>
+
+    <script src="{% static 'js/top-active.js' %}"></script>
+    <script src="{% static 'js/top-gainers.js' %}"></script>
+    <script src="{% static 'js/top-losers.js' %}"></script>
+
 {% endblock %}
