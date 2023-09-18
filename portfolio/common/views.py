@@ -15,19 +15,21 @@ from django.utils.decorators import method_decorator
 # https://pypi.org/project/yfinance/
 import yfinance as yf
 
+from portfolio.watchlist.models import Watchlist
+
+
 # TODO: https://stockanalysis.com/list/nasdaq-stocks/
 
 
 class IndexAPIView(APIView):
 
-    @method_decorator(cache_page(60 * 1, cache='default'))
+    @method_decorator(cache_page(60 * 5, cache='default'))
     def get(self, request):
         # all_tickers = Ticker.objects.all()
         # symbols_list = all_tickers.values_list('symbol', flat=True)
 
         losers = {}
         losers_data = get_day_losers(count=10)
-        print(losers_data)
         for i in losers_data.index:
             symbol = losers_data['Symbol'][i]
             change = losers_data['% Change'][i]
@@ -148,10 +150,12 @@ def index(request):
 
 
 def ticker_details(request, symbol):
+    user = request.user
+    user_watchlist = Watchlist.objects.get(user=user)
+
     ticker = Ticker.objects.filter(symbol__exact=symbol).get()
 
     current_ticker = yf.Ticker(ticker.symbol)
-    print(current_ticker.info)
     ticker.name = current_ticker.info['shortName']
     ticker.website = current_ticker.info['website']
     ticker.live_price = current_ticker.info['currentPrice']
@@ -163,8 +167,14 @@ def ticker_details(request, symbol):
     ticker.market_cap = current_ticker.info['marketCap']
     ticker.short_ratio = current_ticker.info['shortRatio']
 
+    in_watchlist = False
+    for t in user_watchlist.tickers.all():
+        if t.symbol == current_ticker.ticker:
+            in_watchlist = True
+
     context = {
         'ticker': ticker,
+        'in_watchlist': in_watchlist,
     }
     return render(request, 'ticker-details.html', context)
 

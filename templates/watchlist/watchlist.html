@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+    <h2 class="center">My Watchlist:</h2>
+
+    <div class="watchlist">
+        {% if watchlist %}
+            <ul>
+                {% for key, value in watchlist.items %}
+                    <li><a href="{% url 'remove_from_watchlist' ticker=key %}"><img
+                            src="{% static 'images/remove.png' %}" alt="Remove from watchlist"></a> {{ value }} (<a
+                            href="/ticker/{{ key }}/">{{ key }}</a>)
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h3>No stocks in your watchlist yet!</h3>
+        {% endif %}
+    </div>
+{% endblock %}

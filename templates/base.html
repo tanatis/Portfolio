@@ -31,6 +31,7 @@
                         </ul>
                     </li>
                     <li>Friends</li>
+                    <li><a href="{% url 'watchlist' %}">Watchlist</a></li>
 
                     {#            <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">#}
                     {#                <option value="">Select Portfolio</option>#}
@@ -90,8 +91,7 @@
 <footer>
     <div class="footer-wrap">
         <span>Developed by tanatis</span>
-        <a href="https://www.linkedin.com/in/ivan-petkov-a41947176/"><img src="{% static 'images/linkedin.png' %}"
-                                                                          alt="LinkedIn"></a>
+        <a href="https://www.linkedin.com/in/ivan5kov/"><img src="{% static 'images/linkedin.png' %}" alt="LinkedIn"></a>
         <a href="https://github.com/tanatis"><img src="{% static 'images/github.png' %}" alt="gitHub"></a>
     </div>
 </footer>

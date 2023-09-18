@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'portfolio.stocks_portfolio',
     'portfolio.position',
     'portfolio.common',
+    'portfolio.watchlist',
 ]
 
 MIDDLEWARE = [

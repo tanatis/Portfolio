@@ -7,4 +7,5 @@ urlpatterns = [
     path('portfolio/', include('portfolio.stocks_portfolio.urls')),
     path('position/', include('portfolio.position.urls')),
     path('account/', include('portfolio.account.urls')),
+    path('watchlist/', include('portfolio.watchlist.urls')),
 ]

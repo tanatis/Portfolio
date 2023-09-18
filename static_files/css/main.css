@@ -122,6 +122,10 @@ input[type="email"], input[type="number"], input[type="search"], input[type="tex
 .history-header {padding: 1rem 0; display: flex; justify-content: space-between;}
 .history-cell {text-align: center; width: 20%;}
 
+.watchlist {width: 70%; margin: 1rem auto;}
+.watchlist ul {list-style: none; margin: 0; padding: 0; text-align: center;}
+.watchlist ul li {margin: 0 0 1rem 0;}
+
 .pagination {display: flex; justify-content: center; gap: 0.5rem; margin: 1rem 0 3rem;}
 .pagination-link {border: 1px solid #076fe5; padding: 6px 12px; text-decoration: none; border-radius: 5px; color: #076fe5; background-color: #ffffff;}
 .pagination-active,
